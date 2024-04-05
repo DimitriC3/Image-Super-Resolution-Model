@@ -1,2 +1,0 @@
-Colab with working model:
-https://colab.research.google.com/drive/1twpmFSHA_nZ9FrxE3deNwjqXmU3-8Ji4?usp=sharing
