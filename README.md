@@ -5,7 +5,7 @@ Colab: [https://colab.research.google.com/drive/1twpmFSHA_nZ9FrxE3deNwjqXmU3-8Ji
 
 Format of project:
 1. ./dataset:
-    - Contains dataset.py, used for to lower the resolution of images and image preprocessing.
+    - Contains dataset.py
     - Contains utils.py, a helper function used to obtain image paths from desktop.
 
 2. ./model:
@@ -19,6 +19,8 @@ Format of project:
 
 5. train.py
     - Python program used for training
+  
+Results:
 
 ![Untitled presentation](https://github.com/DimitriC3/Image-Super-Resolution-Model/assets/154035020/1a465032-ff49-47ce-90bd-792417402c73)
 
