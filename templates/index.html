@@ -1,1 +1,186 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Model</title>
 
+    <style>
+        #title {
+            text-align: center;
+        }
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .executer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #drop_zone {
+            position: relative;
+            border: 4px dashed #ccc;
+            width: 178px;
+            height: 218px;
+        }
+        #output_zone{
+            border: 4px dashed #ccc;
+            width: 178px;
+            height: 218px;
+        }
+        #seperator{
+            width: 5%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        #drop_zone.hover {
+            background-color: #f0f0f0;
+        }
+
+        #image_preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            max-width: 178px;
+            max-height: 218px;
+
+        }
+
+        #input_tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        #left_space{
+            width: 25%;
+            height: 100%;
+        }
+        #right_space{
+            width: 25%;
+            height: 100%;
+        }
+
+        
+        
+
+    </style>
+  </head>
+  <body>
+    <h3 id="title">Photo Enhancer</h3>
+    <br>
+    <div class="executer">
+        <button onclick="getData();">Enhance Image</button>
+    </div>
+    
+    <br><br>
+    <div class="main">
+        <div id="left_space">
+            <p></p>
+        </div>
+
+        <div class="content">
+            <div class="input">
+                <div>
+                    <p>Click/Drag to input</p>
+                </div>
+                <div id="drop_zone">
+                    <img id="image_preview"/>
+                    <input type="file" id="input_tag">
+                    
+                </div>
+                
+            </div>
+            <div id="seperator">
+                <p>||||</p>
+            </div>
+            <div class="output">
+                <div>
+                    <p>Output image</p>
+                </div>
+                <div id="output_zone">
+                
+                </div>
+            </div>       
+        </div>
+        <div id="right_space">
+            <p></p>
+        </div>
+    </div>
+    
+
+
+    
+
+
+    <script>
+        const dropZone = document.getElementById('drop_zone');
+        const imageInput = document.getElementById('input_tag');
+        const imagePreview = document.getElementById('image_preview');
+    
+        dropZone.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropZone.classList.add('hover');
+        });
+    
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('hover');
+        });
+    
+        dropZone.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropZone.classList.remove('hover');
+            const file = event.dataTransfer.files[0];
+            displayImage(file);
+        });
+    
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0];
+            displayImage(file);
+        });
+
+        function displayImage(file) {
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const imageUrl = event.target.result;
+                    imagePreview.src = imageUrl;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function getData() {
+            console.log("getting data")
+            let output_img = document.getElementById("output_zone")
+            let file = imageInput.files[0];
+
+            fetch("http://127.0.0.1:5000/data", {
+                method: 'POST',
+                body:file
+            })
+            .then(function (response){
+                console.log("Step 1")
+                return response.blob()
+            })
+            .then(function (data){
+                console.log("Step 2")
+                let imgUrl = URL.createObjectURL(data);
+                output_img.innerHTML = '<img src="' + imgUrl + '" height="218" width="178">';
+            })
+          }
+    </script>
+
+  </body>
+</html>
