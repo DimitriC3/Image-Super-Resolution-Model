@@ -12,7 +12,7 @@ from model import SuperResolutionAutoencoder
 
 
 model = SuperResolutionAutoencoder()
-model.load_state_dict(torch.load('overfit_weights/super_resolution_autoencoder_epoch_6.pth'))
+model.load_state_dict(torch.load('weights/super_resolution_autoencoder_epoch_6.pth'))
 model.eval()
 
 app = Flask(__name__)
