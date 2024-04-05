@@ -1,6 +1,7 @@
 # Image-Super-Resolution-Model
 
 Machine learning project on an image denoising/super-resolution app, by Dimitri Christopoulos, Evan Cureton, and Arnauld Binder.
+Colab: [https://colab.research.google.com/drive/1twpmFSHA_nZ9FrxE3deNwjqXmU3-8Ji4?usp=sharing](url)
 
 Format of project:
 1. ./dataset:
