@@ -19,3 +19,6 @@ Format of project:
 
 5. train.py
     - Python program used for training
+
+![Untitled presentation](https://github.com/DimitriC3/Image-Super-Resolution-Model/assets/154035020/1a465032-ff49-47ce-90bd-792417402c73)
+
