@@ -11,19 +11,24 @@ from flask_cors import CORS
 from model import SuperResolutionAutoencoder
 
 def preprocess_image(image):
+    """
     transform = transforms.Compose([
-        transforms.Resize((128, 128)),  # Resize to match model input size
-        transforms.ToTensor(),          # Convert to tensor
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize
+        #transforms.Resize((178, 218)),  # Resize to match model input size
+        transforms.ToTensor()          # Convert to tensor
+        #transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize
     ])
-    image = transform(image).unsqueeze(0)  # Add batch dimension
+    #image = transform(image).unsqueeze(0)  # Add batch dimension
+    image = transform(image)
+    """
+
+    transform = transforms.ToTensor()     
+    image = transform(image).unsqueeze(0)
     return image
 
 
 model = SuperResolutionAutoencoder()
-model.load_state_dict(torch.load('new_super_resolution_autoencoder_epoch_3.pth'))
-
-print(111)
+model.load_state_dict(torch.load('overfit_weights/super_resolution_autoencoder_epoch_6.pth'))
+#model.load_state_dict(torch.load('weights10.pth'))
 
 app = Flask(__name__)
 CORS(app)
@@ -36,9 +41,12 @@ def index():
 @app.route("/data", methods=["POST"])
 def data():
     im = Image.open(io.BytesIO(request.data)).convert("RGB")
-    #blurred_image = im.filter(ImageFilter.GaussianBlur(radius=2))
+    blurred_image = im.filter(ImageFilter.GaussianBlur(radius=2))
+    #blurred_image.show()
 
-    input_image = preprocess_image(im)
+    input_image = preprocess_image(blurred_image)
+    #input_image = preprocess_image(im)
+
     output_image = model(input_image)
 
     # Display or save the output image
