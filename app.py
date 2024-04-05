@@ -28,6 +28,7 @@ def preprocess_image(image):
 
 model = SuperResolutionAutoencoder()
 model.load_state_dict(torch.load('overfit_weights/super_resolution_autoencoder_epoch_6.pth'))
+model.eval()
 #model.load_state_dict(torch.load('weights10.pth'))
 
 app = Flask(__name__)
@@ -41,23 +42,27 @@ def index():
 @app.route("/data", methods=["POST"])
 def data():
     im = Image.open(io.BytesIO(request.data)).convert("RGB")
-    blurred_image = im.filter(ImageFilter.GaussianBlur(radius=2))
+    blurred_image = im.filter(ImageFilter.GaussianBlur(2))
     #blurred_image.show()
 
     input_image = preprocess_image(blurred_image)
     #input_image = preprocess_image(im)
 
+    with torch.no_grad():
+        output_image = model(input_image)
+
     output_image = model(input_image)
+    #print(type(output_image))
 
     # Display or save the output image
-    output_image = output_image.squeeze(0)  # Remove batch dimension
-    output_image = transforms.ToPILImage()(output_image)
+    output_image = transforms.ToPILImage()(output_image.squeeze(0))
+
 
     #size from CELEB A dataset
     #width, height = 178, 218
     #im = im.resize((width, height))
     img_byte_array = io.BytesIO()
-    output_image.save(img_byte_array, format='JPEG')
+    output_image.save(img_byte_array, format='JPEG', quality=100)
     img_byte_array.seek(0)
 
 
